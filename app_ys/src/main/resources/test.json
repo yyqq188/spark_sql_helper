@@ -1,0 +1,75 @@
+{
+  "job": {
+    "spark": {
+      "appName": "kafka-sandbox",
+      "master": "yarn",
+      "seconds": 3,
+      "logLevel": "ERROR",
+      "parameter": {
+        "spark.streaming.kafka.maxRatePerPartition": "100",
+        "spark.dynamicAllocation.enabled": "false",
+        "spark.streaming.backpressure.enabled": "false"
+      }
+    },
+    "parser": {
+      "name": "t_PERM_ARAP",
+      "parameter": {
+        "pojoClassPath": "com.yhl.entity.source.T_PERM_ARAP_SOURCE"
+      }
+    },
+
+    "reader": {
+      "name": "kafkaRowReader",
+      "topic": ["T_PREM_ARAP"],
+      "parameter": {
+        "bootstrap.servers": "nod1.newchinalife.com:9092,nod3.newchinalife.com:9092,nod4.newchinalife.com:9092",
+        "group.id": "aaa",
+        "auto.offset.reset": "earliest",
+        "enable.auto.commit": "false"
+
+      }
+    },
+    "transformer": [
+      {
+        "name": "join",
+        "parameter": {
+          "tableName":"NCI_HBASE_CAP:T_PREM_ARAP",
+          "family": "cf1",
+          "joinColumns": "LIST_ID",
+          "joinDelimiter":"_",
+          "joinColumnsHash": "hash",
+          "ddl" : "BUSI_PROD_CODE string,BUSI_PROD_NAME string,DERIV_TYPE string",
+
+
+          "driverColumns": "column1 string,column2 string",
+          "primarykeyColumns": "primaryKeyColumn",
+          "isAsync": "false"
+        }
+      },
+      {
+        "name": "sql",
+        "parameter": {
+          "tableName": "T",
+          "sqlStr": "select BUSI_PROD_CODE,BUSI_PROD_NAME,DERIV_TYPE,  case DERIV_TYPE when '003' then '003333' else 'other' end as myfield from T",
+          "isShow": "false"
+        }
+      }
+    ],
+    "writer": {
+      "name": "hbaseWriter",
+      "tableName": "test_yhl",
+      "family": "cf1",
+      "rowkey": "BUSI_PROD_CODE",
+      "columns": ["BUSI_PROD_NAME","DERIV_TYPE"],
+      "parameter": {
+        "hbase.zookeeper.quorum": "nod2.newchinalife.com,nod4.newchinalife.com,nod5.newchinalife.com",
+        "hbase.zookeeper.property.clientPort": "2181",
+        "hbase.rpc.timeout": "1200000",
+        "hbase.client.operation.timeout": "960000",
+        "hbase.client.retries.number": "10",
+        "hbase.client.pause": "120000",
+        "hbase.client.scanner.timeout.period": "200000"
+      }
+    }
+  }
+}

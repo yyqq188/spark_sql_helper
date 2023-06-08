@@ -1,0 +1,5 @@
+reader分生成
+row -> sparkstreaming
+dataset -> structstreaming sparksql
+
+Reader的实现类要 implements Serializable
