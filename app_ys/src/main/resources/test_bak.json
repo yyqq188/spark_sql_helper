@@ -9,22 +9,21 @@
         "spark.streaming.backpressure.enabled": "false"
       }
     },
-
+    "parser": {
+      "name": "t_PERM_ARAP",
+      "parameter": {
+        "pojoClassPath": "com.yhl.entity.T_PERM_ARAP_SOURCE"
+      }
+    },
     "reader": {
-      "isShow": "true",
       "name": "kafkaRowReader",
       "topic": ["T_PREM_ARAP"],
+      "isShow": "true",
       "parameter": {
         "bootstrap.servers": "nod1.newchinalife.com:9092,nod3.newchinalife.com:9092,nod4.newchinalife.com:9092",
         "group.id": "aaa",
         "auto.offset.reset": "earliest",
         "enable.auto.commit": "false"
-      }
-    },
-    "parser": {
-      "name": "t_PERM_ARAP",
-      "parameter": {
-        "pojoClassPath": "com.yhl.entity.T_PERM_ARAP_SOURCE"
       }
     },
     "transformer": [
@@ -44,8 +43,8 @@
         }
       },
       {
-        "isShow": "false",
         "name": "sql",
+        "isShow": "false",
         "parameter": {
           "tableName": "T",
           "sqlStr": "select BUSI_PROD_CODE,BUSI_PROD_NAME,DERIV_TYPE,case DERIV_TYPE when '003' then '003333' else 'other' end as myfield from T"

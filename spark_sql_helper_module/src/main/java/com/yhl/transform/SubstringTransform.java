@@ -23,8 +23,11 @@ public class SubstringTransform extends AbstractTransform{
         String field = pluginConfig.getString("parameter.field");
         List<Integer> paras = pluginConfig.getList("parameter.paras",Integer.class);
         String target = pluginConfig.getString("parameter.target");
-        Boolean isShow = Objects.isNull(pluginConfig.getBool("parameter.isShow"))?
-                false:pluginConfig.getBool("parameter.isShow");        final Dataset<Row> rowDataset = dataset.withColumn(target, substring(col(field),
+//        Boolean isShow = Objects.isNull(pluginConfig.getBool("parameter.isShow"))?
+//                false:pluginConfig.getBool("parameter.isShow");
+        Boolean isShow = Objects.isNull(pluginConfig.getString("isShow"))?
+                false:(pluginConfig.getString("isShow").equals("false"))?false:true;
+        final Dataset<Row> rowDataset = dataset.withColumn(target, substring(col(field),
                 paras.get(0), paras.get(1)));
         if(isShow){
             rowDataset.show();

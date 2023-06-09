@@ -2,11 +2,12 @@ package com.yhl.parser;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.yhl.entity.source.T_PERM_ARAP_SOURCE;
+import com.yhl.entity.T_PERM_ARAP_SOURCE;
 
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
+
 
 public class T_PERM_ARAPParser extends AbstractParser implements Serializable {
     @Override
@@ -50,9 +51,6 @@ public class T_PERM_ARAPParser extends AbstractParser implements Serializable {
             key.putAll(data);
             key.putAll(meta);
         }
-
         return  key.toJavaObject(T_PERM_ARAP_SOURCE.class);
     }
-
-
 }

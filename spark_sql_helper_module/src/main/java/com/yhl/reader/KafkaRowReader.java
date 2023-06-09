@@ -16,11 +16,6 @@ import java.io.Serializable;
 import java.util.*;
 
 public class KafkaRowReader extends AbstractReader implements Serializable {
-    //public KafkaRowReader( DataxConfig pluginConfig) {
-    //    super( pluginConfig);
-    //}
-
-
     @Override
     public JavaDStream<String> createSource(JavaStreamingContext ssc,DataxConfig pluginConfig) throws Exception {
 
@@ -42,19 +37,6 @@ public class KafkaRowReader extends AbstractReader implements Serializable {
                 KafkaUtils.createDirectStream(ssc,
                         LocationStrategies.PreferConsistent(),
                         ConsumerStrategies.<String, String>Subscribe(topics, kafkaParams));
-
-
-        //JavaDStream<String> javaDStream = directStream.map(
-        //        new Function<ConsumerRecord<String, String>, String>() {
-        //    @Override
-        //    public String call(ConsumerRecord<String, String> record) throws Exception {
-        //        System.out.println("=============");
-        //        System.out.println(record.value());
-        //        T_PERM_ARAP_SOURCE t_perm_arap_source = Util.parseT_PERM_ARAP(record.value());
-        //
-        //        return JSON.toJSONString(t_perm_arap_source);
-        //    }
-        //});
         JavaDStream<String> javaDStream = directStream.mapPartitions(
                 new FlatMapFunction<Iterator<ConsumerRecord<String, String>>, String>() {
             @Override

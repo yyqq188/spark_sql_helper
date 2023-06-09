@@ -2,15 +2,13 @@ package com.yhl.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.yhl.entity.source.T_PERM_ARAP_SOURCE;
-import org.apache.commons.lang3.StringUtils;
+import com.yhl.entity.T_PERM_ARAP_SOURCE;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.io.*;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 

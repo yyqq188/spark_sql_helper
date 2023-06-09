@@ -31,36 +31,24 @@ public class JoinTransform extends AbstractTransform implements Serializable {
 
     @Override
     public Dataset<Row> transform(Dataset<Row> dataset) throws Exception{
+        //hbase是生产环境还是测试环境
+        String hbaseEnv = pluginConfig.getString("hbase.env");
         //hbase family
         String family = pluginConfig.getString("parameter.family");
         //各种条件的解析
         String tableName = pluginConfig.getString("parameter.tableName");
         //关联用到的join 条件
 //        List<String> joinColumns = pluginConfig.getList("parameter.joinColumns",String.class);
-        List<String> joinColumns = Arrays.asList(pluginConfig.getString("parameter.joinColumns"));
+        String joinColumnStr = pluginConfig.getString("parameter.joinColumns");
+        List<String> joinColumns = Arrays.stream(joinColumnStr.split(",")).map(String::trim).collect(Collectors.toList());
         //hash算法
         String joinHash = pluginConfig.getString("parameter.joinColumnsHash");
-
         String joinDelimiter = pluginConfig.getString("parameter.joinDelimiter");
         //关联之后的结果schema
         String ddlStr = pluginConfig.getString("parameter.ddl");
-
-        Boolean isShow = Objects.isNull(pluginConfig.getString("parameter.isShow"))?
-                false:(pluginConfig.getString("parameter.isShow").equals("false"))?false:true;
-
-        //String joinColumns2 = "";
-        //if(joinColumns.size()>1) {
-        //    //分隔符
-        //
-        //    joinColumns2 = String.join(joinDelimiter,joinColumns);
-        //}else{
-        //    joinColumns2 = joinColumns.get(0);
-        //}
-
-
-
-
-
+        boolean isShow =
+                !Objects.isNull(pluginConfig.getString("parameter.isShow"))
+                        && (!pluginConfig.getString("parameter.isShow").equals("false"));
 
         //这里是为后面生成dataframe提供schema
         String columnStr = ddlStr
@@ -76,7 +64,7 @@ public class JoinTransform extends AbstractTransform implements Serializable {
         //join操作
         JavaRDD<Row> rowJavaRDD1 = rowJavaRDD.mapPartitions(partition -> {
             //获得hbase连接
-            Connection connection = HbaseUtil.getHBaseConnection("prod");
+            Connection connection = HbaseUtil.getHBaseConnection(hbaseEnv);
             Table table = connection.getTable(TableName.valueOf(tableName));
             List<Get> gets = new ArrayList<>();
             while (partition.hasNext()) {

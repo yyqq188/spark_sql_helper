@@ -11,7 +11,6 @@ public class ParserPlugin {
         AbstractParser parser =
                 (AbstractParser) clazz.getConstructor()
                 .newInstance();
-
         return parser;
     }
 

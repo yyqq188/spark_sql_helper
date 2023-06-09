@@ -18,8 +18,10 @@ public class FilterTransform extends AbstractTransform{
     public Dataset<Row> transform(Dataset<Row> dataset) throws Exception {
         String field = pluginConfig.getString("parameter.field");
         List<String> paras = pluginConfig.getList("parameter.paras", String.class);
-        Boolean isShow = Objects.isNull(pluginConfig.getBool("parameter.isShow"))?
-                false:pluginConfig.getBool("parameter.isShow");
+//        Boolean isShow = Objects.isNull(pluginConfig.getBool("parameter.isShow"))?
+//                false:pluginConfig.getBool("parameter.isShow");
+        Boolean isShow = Objects.isNull(pluginConfig.getString("isShow"))?
+                false:(pluginConfig.getString("isShow").equals("false"))?false:true;
         Dataset<Row> filter = dataset.filter(String.join(" ", field, paras.get(0), paras.get(1)));
         if(isShow){
             filter.show();

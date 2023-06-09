@@ -1,4 +1,4 @@
-package com.yhl.entity.source;
+package com.yhl.entity;
 
 import com.yhl.entity.Entity;
 import lombok.AllArgsConstructor;
