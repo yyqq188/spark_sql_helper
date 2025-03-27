@@ -43,6 +43,7 @@
           "isAsync": "false"
         }
       },
+      {},
       {
         "isShow": "false",
         "name": "sql",
